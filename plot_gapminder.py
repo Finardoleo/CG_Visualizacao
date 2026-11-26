@@ -9,6 +9,7 @@ import csv
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 
 ROOT = Path(__file__).resolve().parent
@@ -57,15 +58,15 @@ def create_visualization(output_path):
             [first["gdp_per_capita"], last["gdp_per_capita"]],
             [first["life_expectancy"], last["life_expectancy"]],
             color=CONTINENT_COLORS[last["continent"]],
-            alpha=0.4,
-            linewidth=1.1,
+            alpha=0.5,
+            linewidth=0.8,
             zorder=1,
         )
 
     ax.scatter(
         [start[country]["gdp_per_capita"] for country in countries],
         [start[country]["life_expectancy"] for country in countries],
-        s=24,
+        s=22,
         facecolors="#FBFCFE",
         edgecolors=[CONTINENT_COLORS[end[country]["continent"]] for country in countries],
         linewidths=1.1,
@@ -80,7 +81,7 @@ def create_visualization(output_path):
         ax.scatter(
             [end[country]["gdp_per_capita"] for country in subset],
             [end[country]["life_expectancy"] for country in subset],
-            s=35,
+            s=30,
             color=color,
             edgecolors="white",
             linewidths=0.5,
@@ -89,7 +90,9 @@ def create_visualization(output_path):
         )
 
     ax.set_xscale("log")
-    ax.set_xlabel("PIB per capita (US$)", fontsize=11, labelpad=10)
+    ax.set_xlabel(
+        "PIB per capita (US$, escala logarítmica)", fontsize=11, labelpad=10
+    )
     ax.set_ylabel("Expectativa de vida ao nascer (anos)", fontsize=11, labelpad=10)
     ax.set_title(
         "Análise entre renda e longevidade por país em cada continente (1952-2007)",
@@ -106,21 +109,39 @@ def create_visualization(output_path):
     ax.spines["left"].set_color("#AAB4BF")
     ax.spines["bottom"].set_color("#AAB4BF")
 
-    handles, labels = ax.get_legend_handles_labels()
-    continent_entries = [
-        (handle, label)
-        for handle, label in zip(handles, labels)
-        if label != str(YEARS[0])
+    legend_handles = [
+        Line2D(
+            [],
+            [],
+            marker="o",
+            linestyle="none",
+            markerfacecolor="#FBFCFE",
+            markeredgecolor="#526170",
+            markersize=6,
+        ),
     ]
-    legend = ax.legend(
-        [handle for handle, _ in continent_entries],
-        [label for _, label in continent_entries],
-        title="Continentes",
+    legend_labels = [f"{YEARS[0]} (círculo vazio)"]
+    for continent, color in CONTINENT_COLORS.items():
+        legend_handles.append(
+            Line2D(
+                [],
+                [],
+                marker="o",
+                linestyle="none",
+                markerfacecolor=color,
+                markeredgecolor="white",
+                markersize=6,
+            )
+        )
+        legend_labels.append(continent)
+
+    ax.legend(
+        legend_handles,
+        legend_labels,
+        title=f"{YEARS[0]} (círculo vazio); {YEARS[1]} por continente",
         frameon=False,
         loc="lower right",
-        ncol=1,
     )
-    ax.add_artist(legend)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, dpi=180, facecolor=fig.get_facecolor())
     plt.close(fig)

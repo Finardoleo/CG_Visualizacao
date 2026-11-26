@@ -17,7 +17,7 @@
 > - Se houver mais de um conjunto de dados, liste todos separadamente.
 > - Para cada conjunto de dados, inclua também uma **descrição curta** explicando os dados.
 
-1. **Dataset 1**: <mark>`<https://www.gapminder.org/data/>'</mark>
+1. **Dataset 1**: <mark>`<https://github.com/jennybc/gapminder/blob/main/inst/extdata/gapminder.tsv>'</mark>
     * **Descrição curta**: <mark>`O dataset é um recorte que contém dados de 142 países entre 1952-2007 em intervalos de cinco anos (apesar da comparação ser somente entre os pontos de início e final do estudo). Os atributos do dataset incluem: país, continente, ano, expectativa de vida ao nascer, população e PIB per capita (sendo que este último é expresso em dólar estadunidense ajustados pela inflação.)`</mark>
 
  

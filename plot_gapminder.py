@@ -92,7 +92,7 @@ def create_visualization(output_path):
     ax.set_xlabel("PIB per capita (US$)", fontsize=11, labelpad=10)
     ax.set_ylabel("Expectativa de vida ao nascer (anos)", fontsize=11, labelpad=10)
     ax.set_title(
-        "Análise entre expectativa de vida e PIB entre 1952 e 2007",
+        "Análise entre renda e longevidade por país em cada continente (1952-2007)",
         loc="left",
         fontsize=17,
         fontweight="bold",

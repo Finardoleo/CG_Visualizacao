@@ -57,8 +57,8 @@ def create_visualization(output_path):
             [first["gdp_per_capita"], last["gdp_per_capita"]],
             [first["life_expectancy"], last["life_expectancy"]],
             color=CONTINENT_COLORS[last["continent"]],
-            alpha=0.16,
-            linewidth=0.9,
+            alpha=0.4,
+            linewidth=1.1,
             zorder=1,
         )
 
@@ -67,8 +67,8 @@ def create_visualization(output_path):
         [start[country]["life_expectancy"] for country in countries],
         s=24,
         facecolors="#FBFCFE",
-        edgecolors="#627080",
-        linewidths=0.8,
+        edgecolors=[CONTINENT_COLORS[end[country]["continent"]] for country in countries],
+        linewidths=1.1,
         label=str(YEARS[0]),
         zorder=2,
     )
@@ -92,19 +92,11 @@ def create_visualization(output_path):
     ax.set_xlabel("PIB per capita (US$)", fontsize=11, labelpad=10)
     ax.set_ylabel("Expectativa de vida ao nascer (anos)", fontsize=11, labelpad=10)
     ax.set_title(
-        "Mais renda e vidas mais longas — mas em ritmos diferentes",
+        "Análise entre expectativa de vida e PIB entre 1952 e 2007",
         loc="left",
         fontsize=17,
         fontweight="bold",
         pad=14,
-    )
-    ax.text(
-        0,
-        1.015,
-        "Trajetória de cada país entre 1952 e 2007 · eixo de renda em escala logarítmica",
-        transform=ax.transAxes,
-        fontsize=10,
-        color="#526170",
     )
     ax.grid(True, which="major", color="#DCE2E8", linewidth=0.8)
     ax.grid(True, which="minor", axis="x", color="#E9EDF1", linewidth=0.5)
@@ -115,25 +107,20 @@ def create_visualization(output_path):
     ax.spines["bottom"].set_color("#AAB4BF")
 
     handles, labels = ax.get_legend_handles_labels()
-    year_handle = handles.pop(0)
-    year_label = labels.pop(0)
+    continent_entries = [
+        (handle, label)
+        for handle, label in zip(handles, labels)
+        if label != str(YEARS[0])
+    ]
     legend = ax.legend(
-        handles,
-        labels,
-        title="Continente em 2007",
+        [handle for handle, _ in continent_entries],
+        [label for _, label in continent_entries],
+        title="Continentes",
         frameon=False,
         loc="lower right",
         ncol=1,
     )
     ax.add_artist(legend)
-    ax.legend(
-        [year_handle],
-        [year_label],
-        title="Ponto inicial",
-        frameon=False,
-        loc="lower left",
-    )
-
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, dpi=180, facecolor=fig.get_facecolor())
     plt.close(fig)
